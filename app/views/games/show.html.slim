@@ -1,0 +1,12 @@
+p#notice = notice
+
+p
+  strong Fanduel points:
+  = @game.fanduel_points
+p
+  strong Date:
+  = @game.game_day
+
+= link_to 'Edit', edit_game_path(@game)
+'|
+= link_to 'Back', games_path

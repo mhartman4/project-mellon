@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  fanduel_points: 1.5
+  date: 2014-04-05
+
+two:
+  fanduel_points: 1.5
+  date: 2014-04-05

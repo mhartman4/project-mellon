@@ -1,0 +1,47 @@
+javascript:
+  $(function() {
+    new Highcharts.Chart({
+      chart: {
+        renderTo: "games_chart"
+      },
+      title: {
+        text: "Last 4 Games"
+      },
+      xAxis: {
+        categories: ["#{@player.games[3].game_day}", "#{@player.games[2].game_day}", "#{@player.games[1].game_day}", "#{@player.games[0].game_day}"]
+      },
+      yAxis: {
+        title: {
+          text: "Fanduel Points"
+        }
+      },
+      series: [{
+        name: "Lebron James",
+        data: #{@player.games.reverse.collect {|game| game.fanduel_points}}
+      }]
+    })
+  });
+
+h1
+  =@player.name
+p
+  = link_to 'Edit', edit_player_path(@player), :class=>"btn btn-primary"
+  |&nbsp;
+  = link_to 'Back', players_path, :class=>"btn btn-primary"
+
+div id="games_chart" style="width:560px; height: 300px;"
+
+table.table.table-hover
+  thead
+    tr
+      th Date
+      th FDP
+
+  tbody
+    - @player.games.each do |game|
+      tr
+        td = link_to game.game_day, game
+        td = game.fanduel_points
+
+/= @player.games.reverse.collect {|game| h game.game_day.strftime('%a %b%d').gsub('&quot', '"')}
+
