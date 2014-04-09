@@ -62,7 +62,7 @@ javascript:
       },
       series: [{
         name: "Minutes",
-        data: #{@player.games.reverse.collect {|game| (game.fanduel_points) }}
+        data: #{@player.games.reverse.collect {|game| (game.minutes) }}
       }],
     })
 
