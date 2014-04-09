@@ -32470,3 +32470,48 @@ Started GET "/assets/application.js?body=1" for 127.0.0.1 at 2014-04-09 13:47:29
 
 
 Started GET "/assets/jquery.js?body=1" for 127.0.0.1 at 2014-04-09 13:47:29 -0400
+
+
+Started GET "/players/452" for 127.0.0.1 at 2014-04-09 13:49:36 -0400
+Processing by PlayersController#show as HTML
+  Parameters: {"id"=>"452"}
+  [1m[36mPlayer Load (1.9ms)[0m  [1mSELECT "players".* FROM "players" WHERE "players"."id" = $1 LIMIT 1[0m  [["id", "452"]]
+  [1m[35mGame Load (12.2ms)[0m  SELECT "games".* FROM "games" WHERE "games"."player_id" = $1 ORDER BY game_day DESC  [["player_id", 452]]
+  Rendered players/show.html.slim within layouts/application (44.0ms)
+Completed 200 OK in 61ms (Views: 44.9ms | ActiveRecord: 14.2ms)
+
+
+Started GET "/assets/players.css?body=1" for 127.0.0.1 at 2014-04-09 13:49:36 -0400
+
+
+Started GET "/assets/application.css?body=1" for 127.0.0.1 at 2014-04-09 13:49:36 -0400
+
+
+Started GET "/assets/welcome.css?body=1" for 127.0.0.1 at 2014-04-09 13:49:36 -0400
+
+
+Started GET "/assets/turbolinks.js?body=1" for 127.0.0.1 at 2014-04-09 13:49:36 -0400
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 127.0.0.1 at 2014-04-09 13:49:36 -0400
+
+
+Started GET "/assets/jquery.js?body=1" for 127.0.0.1 at 2014-04-09 13:49:36 -0400
+
+
+Started GET "/assets/games.js?body=1" for 127.0.0.1 at 2014-04-09 13:49:36 -0400
+
+
+Started GET "/assets/scaffolds.css?body=1" for 127.0.0.1 at 2014-04-09 13:49:36 -0400
+
+
+Started GET "/assets/players.js?body=1" for 127.0.0.1 at 2014-04-09 13:49:36 -0400
+
+
+Started GET "/assets/welcome.js?body=1" for 127.0.0.1 at 2014-04-09 13:49:36 -0400
+
+
+Started GET "/assets/application.js?body=1" for 127.0.0.1 at 2014-04-09 13:49:36 -0400
+
+
+Started GET "/assets/games.css?body=1" for 127.0.0.1 at 2014-04-09 13:49:36 -0400

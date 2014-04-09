@@ -51,7 +51,7 @@ javascript:
         plotLines: [{
             color: '#FF0000',
             width: 2,
-            value: #{@player.games.collect {|game| game.fanduel_points}.inject(:+) / @player.games.length}
+            value: #{@player.games.collect {|game| game.minutes}.inject(:+) / @player.games.length}
         }]
       },
       tooltip: {
