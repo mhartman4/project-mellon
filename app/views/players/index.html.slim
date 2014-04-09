@@ -1,6 +1,9 @@
 h1 All Players
 br
-= link_to 'Add Player', new_player_path, :class=> "btn btn-primary"
+/= link_to 'Add Player', new_player_path, :class=> "btn btn-primary"
+
+/div.ui-widget
+  /input id="tags"
 
 br
 table.table.table-hover
@@ -8,7 +11,6 @@ table.table.table-hover
     tr
       th Name
       th ID
-      th
 
   tbody
     - @players.each do |player|
@@ -22,3 +24,10 @@ table.table.table-hover
 br
 
 
+/javascript:
+ /$(function() {
+     /var availableTags = #{raw @players.collect {|player| player.name}};
+     /$( "#tags" ).autocomplete({
+       /source: availableTags
+     /});
+    /});

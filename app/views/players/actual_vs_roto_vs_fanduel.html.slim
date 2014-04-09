@@ -5,29 +5,28 @@ javascript:
         renderTo: "games_chart"
       },
       title: {
-        text: "Mean FDP: #{(@player.games.collect {|game| game.fanduel_points}.inject(:+) / @player.games.length).round(2)}"
+        text: "Fanduel Points vs Projections"
       },
       xAxis: {
-        categories: #{ raw @player.games.reverse.collect {|game| game.game_day.strftime('%b %d') + ' ' + game.opponent}}
-
+        categories: #{raw @player.games.reverse.collect {|game| game.game_day.strftime('%b %d')}}
       },
       yAxis: {
         title: {
           text: "Fanduel Points"
-        },
-        plotLines: [{
-            color: '#FF0000',
-            width: 2,
-            value: #{@player.games.collect {|game| game.fanduel_points}.inject(:+) / @player.games.length}
-        }]
+        }
       },
       tooltip: {
         formatter: function() {
           return this.x + ': ' + this.y
-          //return '#{@player.games.collect}'
         }
       },
       series: [{
+        name: "NumberFire Projection",
+        data: #{@player.games.reverse.collect {|game| game.numberfire_fdp}}
+      }, {
+        name: "Rotowire Projection",
+        data: #{@player.games.reverse.collect {|game| game.rotowire_fdp}}
+      },{
         name: "Fanduel Points",
         data: #{@player.games.reverse.collect {|game| game.fanduel_points}}
       }],

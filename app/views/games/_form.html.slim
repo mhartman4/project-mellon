@@ -7,12 +7,22 @@
           li = message
 
   .field
-    = f.label :fanduel_points
-    = f.text_field :fanduel_points
-  .field
     = f.label :player_id
     = f.text_field :player_id
   .field
     = f.label :game_day
     = f.date_select :game_day
+
+  .field
+    = f.label :fanduel_points
+    = f.text_field :fanduel_points
+  .field
+    = f.label :minutes
+    = f.text_field :minutes
+  .field
+    = f.label :rotowire_fdp
+    = f.text_field :rotowire_fdp
+  .field
+    = f.label :numberfire_fdp
+    = f.text_field :numberfire_fdp
   .actions = f.submit 'Save'
