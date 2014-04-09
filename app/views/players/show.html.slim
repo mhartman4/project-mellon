@@ -29,7 +29,73 @@ javascript:
       },
       series: [{
         name: "Fanduel Points",
-        data: #{@player.games.reverse.collect {|game| game.fanduel_points}}
+        data: #{@player.games.reverse.collect {|game| (game.fanduel_points) }}
+      }],
+    })
+
+    new Highcharts.Chart({
+      chart: {
+        renderTo: "games_chart2"
+      },
+      title: {
+        text: "Minutes per Game: #{(@player.games.collect {|game| game.minutes}.inject(:+) / @player.games.length).round(2)}"
+      },
+      xAxis: {
+        categories: #{ raw @player.games.reverse.collect {|game| game.game_day.strftime('%b %d') + ' ' + game.opponent}}
+
+      },
+      yAxis: {
+        title: {
+          text: "Minutes"
+        },
+        plotLines: [{
+            color: '#FF0000',
+            width: 2,
+            value: #{@player.games.collect {|game| game.fanduel_points}.inject(:+) / @player.games.length}
+        }]
+      },
+      tooltip: {
+        formatter: function() {
+          return this.x + ': ' + this.y
+          //return '#{@player.games.collect}'
+        }
+      },
+      series: [{
+        name: "Fanduel Points",
+        data: #{@player.games.reverse.collect {|game| (game.fanduel_points) }}
+      }],
+    })
+
+    new Highcharts.Chart({
+      chart: {
+        renderTo: "games_chart3"
+      },
+      title: {
+        text: "Avg FDP / Minute: #{(@player.games.collect {|game| game.fanduel_points / game.minutes}.inject(:+) / @player.games.length).round(2)}"
+      },
+      xAxis: {
+        categories: #{ raw @player.games.reverse.collect {|game| game.game_day.strftime('%b %d') + ' ' + game.opponent}}
+
+      },
+      yAxis: {
+        title: {
+          text: "FDP per Minute"
+        },
+        plotLines: [{
+            color: '#FF0000',
+            width: 2,
+            value: #{@player.games.collect {|game| game.fanduel_points / game.minutes}.inject(:+) / @player.games.length}
+        }]
+      },
+      tooltip: {
+        formatter: function() {
+          return this.x + ': ' + this.y
+          //return '#{@player.games.collect}'
+        }
+      },
+      series: [{
+        name: "FDP per Minute",
+        data: #{@player.games.reverse.collect {|game| (game.fanduel_points / game.minutes) }}
       }],
     })
   });
@@ -40,6 +106,10 @@ p
   = link_to 'Back', players_path, :class=>"btn btn-primary"
 
 div id="games_chart"
+
+div id="games_chart2"
+
+div id="games_chart3"
 
 table.table.table-hover
   thead
