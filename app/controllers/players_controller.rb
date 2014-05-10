@@ -5,6 +5,10 @@ class PlayersController < ApplicationController
   # GET /players.json
   def index
     @players = Player.all
+    if params[:name]
+      player = Player.find_by_name(params[:name])
+      redirect_to "/players/#{player.id}"
+    end
   end
 
   # GET /players/1
