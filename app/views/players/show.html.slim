@@ -1,5 +1,7 @@
+-
 javascript:
   $(function() {
+
     new Highcharts.Chart({
       chart: {
         renderTo: "games_chart"
@@ -98,6 +100,39 @@ javascript:
         data: #{@player.games.reverse.collect {|game| (game.fanduel_points / game.minutes) }}
       }],
     })
+
+    new Highcharts.Chart({
+      chart: {
+        renderTo: "games_chart4"
+      },
+      title: {
+        text: "Mean Salary: #{(@player.games.collect {|game| game.salary}.inject(:+) / @player.games.length).round(2)}"
+      },
+      xAxis: {
+        categories: #{ raw @player.games.reverse.collect {|game| game.game_day.strftime('%b %d') + ' ' + game.opponent}}
+
+      },
+      yAxis: {
+        title: {
+          text: "Salary"
+        },
+        plotLines: [{
+            color: '#FF0000',
+            width: 2,
+            value: #{@player.games.collect {|game| game.salary}.inject(:+) / @player.games.length}
+        }]
+      },
+      tooltip: {
+        formatter: function() {
+          return this.x + ': ' + this.y
+          //return '#{@player.games.collect}'
+        }
+      },
+      series: [{
+        name: "Salary",
+        data: #{@player.games.reverse.collect {|game| (game.salary) }}
+      }],
+    })
   });
 
 br
@@ -112,10 +147,13 @@ div id="games_chart2"
 
 div id="games_chart3"
 
+div id="games_chart4"
+
 table.table.table-hover
   thead
     tr
       th Date
+      th Salary
       th FDP
       th Rotowire
       th NumberFire
@@ -124,6 +162,7 @@ table.table.table-hover
     - @player.games.each do |game|
       tr
         td = link_to game.game_day, game
+        td = "$#{game.salary}"
         td = game.fanduel_points
         td = game.rotowire_fdp
         td = game.numberfire_fdp
