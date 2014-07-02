@@ -7,7 +7,6 @@ class Player < ActiveRecord::Base
     self.player_ids = ids.split(",")
   end
 
-
   def self.search(search)
     if search
       @players = Player.find(:all, conditions: ['name LIKE ?', "%#{search}%"])

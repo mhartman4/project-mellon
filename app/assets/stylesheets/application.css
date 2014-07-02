@@ -16,6 +16,15 @@
   background-color: #c0d9ef;
 }
 
+#pm-logo {
+  margin-left: 20px;
+  margin-bottom: 20px;
+}
+
+#the-basics {
+  margin-left: 20px;
+}
+
 .twitter-typeahead{
   width:100%;
 }
@@ -73,7 +82,7 @@
 
 .tt-suggestion {
   padding: 3px 20px;
-  font-size: 18px;
+  font-size: 15px;
   line-height: 24px;
 }
 
@@ -82,3 +91,6 @@
   background-color: #0097cf;
 
 }
+
+
+

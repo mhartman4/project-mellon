@@ -6,4 +6,5 @@ class Game < ActiveRecord::Base
   def more_than_twenty?
     self.points > 20.0
   end
+
 end

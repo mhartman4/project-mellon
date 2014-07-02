@@ -7,14 +7,12 @@
 </head>
 <body>
 <div class="navbar navbar-fixed-top">
-<div class="container-fluid">
-    <br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <img src="http://i.imgur.com/TtMC2HD.jpg" height="50">
-    <br><br>
-  <div id="the-basics">
-    <input class="typeahead input-lg" type="text" placeholder="Search"></input>
-  </div>
+<div class="container-fluid" style="display: inline-flex;">
+    <img src="http://i.imgur.com/TtMC2HD.jpg" height="50" id="pm-logo">
+
+  <span id="the-basics">
+    <input class="typeahead input-lg" type="text" placeholder="Search (e.g. LeBron)"></input>
+  </span>
 
 
 
@@ -22,7 +20,7 @@
 
 </div>
 </div>
-<br><br><br><br><br><br><br>
+<br><br><br>
 <%= yield %>
 
 </body>
