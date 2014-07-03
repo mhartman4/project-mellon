@@ -4,7 +4,7 @@ class PlayersController < ApplicationController
   # GET /players
   # GET /players.json
   def index
-    @players = Player.all
+    @players = Player.paginate(:page => params[:page])
     if params[:name]
       player = Player.find_by_name(params[:name])
       redirect_to "/players/#{player.id}"

@@ -1,20 +1,24 @@
-
 br
 
 p
-  = link_to '< Back', players_path, :class=>"btn btn-primary"
+  = link_to '< Back', players_path, :class=>"btn btn-primary", :style=>"background-color: #c0d9ef; border-color: #c0d9ef; color: black;"
 h1 align="center"
   ="#{@player.name} - #{@player.games.pluck(:team).uniq.to_sentence}"
+
+.well.col-md-3 style="margin: 0 37%;"
+  dd Stat1
+  dd Stat2
+  dd Stat3
 
 .btn-group align="center" style="padding: 10px 36%;"
   button.btn.btn-default.stat-selector.active type="button" id="fdp-selector" Fanduel Points
   button.btn.btn-default.stat-selector type="button" id="minutes-selector" Minutes
-  button.btn.btn-default.stat-selector type="button" id="fdp-per-minute-selector" FDP / Minute
+  button.btn.btn-default.stat-selector type="button" id="fdp-per-36-selector" FDP per 36
   button.btn.btn-default.stat-selector type="button" id="salary-selector" Salary
 
 .chart id="fanduel-points"
 .chart id="minutes"
-.chart id="fdp-per-minute"
+.chart id="fdp-per-36"
 .chart id="salary"
 
 
@@ -38,42 +42,57 @@ table.table.table-hover
 
 javascript:
   function renderChart(id, statName, chartData) {
+    mean = jStat(chartData).mean();
+    sd = jStat(chartData).stdev();
+
     new Highcharts.Chart({
       chart: {
         renderTo: id
       },
       title: {
-        text: statName
+        text: statName + " (Avg: " + (Math.round(mean * 100) / 100) + ")"
       },
       xAxis: {
         categories: #{ raw @player.games.reverse.collect {|game| game.game_day.strftime('%b %d') + ' ' + game.opponent}}
-
       },
       yAxis: {
         title: {
           text: statName
         },
+        gridLineColor: '#EDEDED',
         plotLines: [{
             color: '#FF0000',
             width: 2,
-            value: jStat(chartData).mean()
-        }]
+            value: mean
+        },
+        {
+          color: '#97C74E',
+            width: 2,
+            value: mean - sd
+        },
+        {
+          color: '#97C74E',
+            width: 2,
+            value: mean + sd
+        }
+        ]
       },
       tooltip: {
         formatter: function() {
-          return this.x + ': ' + this.y
+          return this.x + ': ' + Math.round(this.y * 100) / 100
         }
       },
       series: [{
         name: statName,
         data: chartData
       }],
-    })
+    });
   }
 
+/render Fanduel Points initially
 javascript:
   $(function() {
-    renderChart("fanduel-points", "Fanduel Points", #{@player.games.reverse.collect {|game| (game.fanduel_points) }});
+    renderChart("fanduel-points", "Fanduel Points", #{@player.games.pluck(:fanduel_points).reverse});
   });
 
 javascript:
@@ -82,118 +101,27 @@ javascript:
     $(".chart").hide();
   });
 
+  $('#fdp-selector').click(function() {
+    $("#fanduel-points").show();
+    renderChart("fanduel-points", "Fanduel Points", #{@player.games.pluck(:fanduel_points).reverse});
+  });
+
   $('#minutes-selector').click(function() {
     $("#fdp-selector").removeClass("active");
     $("#minutes").show();
-    new Highcharts.Chart({
-      chart: {
-        renderTo: "minutes"
-      },
-      title: {
-        text: "#{(@player.games.collect {|game| game.minutes}.inject(:+) / @player.games.length).round(2)} minutes per game"
-      },
-      xAxis: {
-        categories: #{ raw @player.games.reverse.collect {|game| game.game_day.strftime('%b %d') + ' ' + game.opponent}}
-
-      },
-      yAxis: {
-        title: {
-          text: "Minutes"
-        },
-        plotLines: [{
-            color: '#FF0000',
-            width: 2,
-            value: #{@player.games.collect {|game| game.minutes}.inject(:+) / @player.games.length}
-        }]
-      },
-      tooltip: {
-        formatter: function() {
-          return this.x + ': ' + this.y
-          //return '#{@player.games.collect}'
-        }
-      },
-      series: [{
-        name: "Minutes",
-        data: #{@player.games.reverse.collect {|game| (game.minutes) }}
-      }],
-    });
+    renderChart("minutes", "Minutes", #{@player.games.pluck(:minutes).reverse});
   });
 
-  $('#fdp-per-minute-selector').click(function() {
+  $('#fdp-per-36-selector').click(function() {
     $("#fdp-selector").removeClass("active");
-    $("#fdp-per-minute").show();
-    new Highcharts.Chart({
-      chart: {
-        renderTo: "fdp-per-minute"
-      },
-      title: {
-        text: "#{(@player.games.collect {|game| game.fanduel_points / game.minutes}.inject(:+) / @player.games.length).round(2)} FDP / Minute"
-      },
-      xAxis: {
-        categories: #{ raw @player.games.reverse.collect {|game| game.game_day.strftime('%b %d') + ' ' + game.opponent}}
-
-      },
-      yAxis: {
-        title: {
-          text: "FDP per Minute"
-        },
-        plotLines: [{
-            color: '#FF0000',
-            width: 2,
-            value: #{@player.games.collect {|game| game.fanduel_points / game.minutes}.inject(:+) / @player.games.length}
-        }]
-      },
-      tooltip: {
-        formatter: function() {
-          return this.x + ': ' + this.y
-          //return '#{@player.games.collect}'
-        }
-      },
-      series: [{
-        name: "FDP per Minute",
-        data: #{@player.games.reverse.collect {|game| (game.fanduel_points / game.minutes) }}
-      }],
-    })
+    $("#fdp-per-36").show();
+    renderChart("fdp-per-36", "FDP per 36", #{@player.games.reverse.collect {|game| (game.fanduel_points / game.minutes) * 36}});
   });
 
   $('#salary-selector').click(function() {
     $("#fdp-selector").removeClass("active");
     $("#salary").show();
-    new Highcharts.Chart({
-      chart: {
-        renderTo: "salary"
-      },
-      title: {
-        text: "Avg Salary: $#{number_with_delimiter((@player.games.collect {|game| game.salary}.inject(:+) / @player.games.length).round(0), :delimiter => ',')}"
-      },
-      xAxis: {
-        categories: #{ raw @player.games.reverse.collect {|game| game.game_day.strftime('%b %d') + ' ' + game.opponent}}
-
-      },
-      yAxis: {
-        title: {
-          text: "Salary"
-        },
-        plotLines: [{
-            color: '#FF0000',
-            width: 2,
-            value: #{@player.games.collect {|game| game.salary}.inject(:+) / @player.games.length}
-        }]
-      },
-      tooltip: {
-        formatter: function() {
-          return this.x + ': ' + this.y
-          //return '#{@player.games.collect}'
-        }
-      },
-      series: [{
-        name: "Salary",
-        data: #{@player.games.reverse.collect {|game| (game.salary) }}
-      }],
-    })
+    renderChart("salary", "Salary", #{@player.games.pluck(:salary).reverse});
   });
 
-  $('#fdp-selector').click(function() {
-    $("#fanduel-points").show();
-  });
 

@@ -1,12 +1,25 @@
+div align="center"
+  = will_paginate @players
+
 table.table.table-hover
   thead
     tr
       th Name
-      th ID
+      th Team(s)
+      th FDP/36mins
+      th FDP/Game
+      th Minutes/Game
+      th FDP/$1K
 
   tbody
     - @players.each do |player|
       tr
         td = link_to player.name, player
-        td = player.id
+        td = player.teams
+        td = player.fdp_per_36.round(2)
+        td = player.fdp_per_game.round(2)
+        td = player.minutes_per_game.round(2)
+        td = player.avg_adj_fdp_per_1k.round(2)
 
+div align="center"
+  = will_paginate @players
