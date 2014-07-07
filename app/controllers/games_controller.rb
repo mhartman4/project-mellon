@@ -4,7 +4,11 @@ class GamesController < ApplicationController
   # GET /games
   # GET /games.json
   def index
-    @games = Game.all
+    unless params[:sort]
+      params[:sort] = "fdp_per_36"
+      params[:direction] = "desc"
+    end
+    @games = Game.order("#{params[:sort]} #{params[:direction]}").select {|sign_up| can? :read, sign_up }.paginate(:page => params[:page])
   end
 
   # GET /games/1

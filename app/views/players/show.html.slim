@@ -1,20 +1,34 @@
 br
 
 p
-  = link_to '< Back', players_path, :class=>"btn btn-primary", :style=>"background-color: #c0d9ef; border-color: #c0d9ef; color: black;"
+  = link_to '< Back', players_path, :class=>"btn btn-primary", :style=>"background-color: white; border-color: #c0d9ef; color: black;"
 h1 align="center"
   ="#{@player.name} - #{@player.games.pluck(:team).uniq.to_sentence}"
-
-.well.col-md-3 style="margin: 0 37%;"
-  dd Stat1
-  dd Stat2
-  dd Stat3
 
 .btn-group align="center" style="padding: 10px 36%;"
   button.btn.btn-default.stat-selector.active type="button" id="fdp-selector" Fanduel Points
   button.btn.btn-default.stat-selector type="button" id="minutes-selector" Minutes
   button.btn.btn-default.stat-selector type="button" id="fdp-per-36-selector" FDP per 36
   button.btn.btn-default.stat-selector type="button" id="salary-selector" Salary
+
+.well.col-md-4 style="margin: 0 33%;"
+  table id="summary" width="100%"
+    tr
+      td Min.
+      td 1st Qu.
+      td Median
+      td Mean
+      td 3rd Qu.
+      td Max.
+    tr
+      td id="min" #
+      td id="1st-quart" #
+      td id="median" #
+      td id="mean" #
+      td id="3rd-quart" #
+      td id="max" #
+
+
 
 .chart id="fanduel-points"
 .chart id="minutes"
@@ -42,15 +56,27 @@ table.table.table-hover
 
 javascript:
   function renderChart(id, statName, chartData) {
+    min = jStat(chartData).min();
+    firstQuartile = jStat(chartData).quartiles()[0];
+    median = jStat(chartData).median();
     mean = jStat(chartData).mean();
+    thirdQuartile = jStat(chartData).quartiles()[2];
+    max = jStat(chartData).max();
     sd = jStat(chartData).stdev();
+
+    $("#min").text(round(min));
+    $("#1st-quart").text(round(firstQuartile));
+    $("#median").text(round(median));
+    $("#mean").text(round(mean));
+    $("#3rd-quart").text(round(thirdQuartile));
+    $("#max").text(round(max));
 
     new Highcharts.Chart({
       chart: {
         renderTo: id
       },
       title: {
-        text: statName + " (Avg: " + (Math.round(mean * 100) / 100) + ")"
+        text: statName
       },
       xAxis: {
         categories: #{ raw @player.games.reverse.collect {|game| game.game_day.strftime('%b %d') + ' ' + game.opponent}}
@@ -79,12 +105,22 @@ javascript:
       },
       tooltip: {
         formatter: function() {
-          return this.x + ': ' + Math.round(this.y * 100) / 100
+          return this.x + ': ' + Math.round(this.y * 100) / 100 + '<br/> p-value: ' + jStat.ztest(this.y, mean, sd, 1) + '<br/> t-score: ' + jStat.tscore(this.y, mean, sd, chartData.length)
         }
       },
       series: [{
         name: statName,
         data: chartData
+      },
+      {
+        name: "Mean",
+        color: '#FF0000',
+        data: []
+      },
+      {
+        name: "1 SD above/below",
+        color: '#97C74E',
+        data: []
       }],
     });
   }

@@ -24,7 +24,11 @@ class Player < ActiveRecord::Base
   end
 
   def fdp_per_36
-    games.collect {|game| (game.fanduel_points / game.minutes) * 36}.sum / games.length
+    begin
+      games.collect {|game| (game.fanduel_points / game.minutes) * 36}.sum / games.length
+    rescue
+      return 0.0
+    end
   end
 
   def minutes_per_game
