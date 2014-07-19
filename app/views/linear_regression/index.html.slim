@@ -1,35 +1,43 @@
 
 h1 Linear Regression (one variable)
 
+
+.col-md-3 style="display: flex;"
+  select.form-control
+    -Game.column_names.each do |col_name|
+      -unless col_name==params[:x]
+        option #{col_name}
+      -else
+        option selected="selected" #{col_name}
+  select.form-control
+    -Game.column_names.each do |col_name|
+      -unless col_name==params[:y]
+        option #{col_name}
+      -else
+        option selected="selected" #{col_name}
+
+
+
 #scatter-plot
 
 javascript:
-  // Draw a bubble chart for brand price vs volume sized by value
-  /*var svg = dimple.newSvg("body", 600, 400);
-  var data =
-    #{raw @games.to_json(only: [:minutes, :fanduel_points])}
-    ;
-  var myChart = new dimple.chart(svg, data);
-  myChart.addMeasureAxis("x", "Sales Volume");
-  myChart.addMeasureAxis("y", "Price");
-  myChart.addSeries("Brand", dimple.plot.bubble);
-  myChart.draw();
-  */
   $(function () {
-
-    inputData = #{Game.all.pluck(:minutes, :fanduel_points)};
+    inputData = #{@game_data};
     fit1 = ss.linear_regression().data(inputData);
+    xMin = ss.min(#{@x});
+    xMax = ss.max(#{@x});
+
     return new Highcharts.Chart({
       chart: {
         renderTo: "scatter-plot"
       },
       title: {
-            text: 'Minutes vs Fanduel Points'
+            text: '#{params[:x].titleize} vs. #{params[:y].titleize}'
         },
         xAxis: {
             title: {
                 enabled: true,
-                text: 'Minutes'
+                text: '#{params[:x].titleize}'
             },
             startOnTick: true,
             endOnTick: true,
@@ -37,17 +45,17 @@ javascript:
         },
         yAxis: {
             title: {
-                text: 'Fanduel Points'
+                text: '#{params[:y].titleize}'
             }
         },
         tooltip: {
           formatter: function() {
-            return round(this.x) + " mins, " + round(this.y) + " FDP" ;
+            return round(this.x) + " #{params[:x].titleize}, " + round(this.y) + " #{params[:y].titleize}" ;
           }
         },
         series: [{
           type: "scatter",
-          name: "All Players",
+          name: "All Games",
           color: 'rgba(119, 152, 191, .5)',
           data: inputData
         },
@@ -55,7 +63,7 @@ javascript:
           type: "line",
           name: "Least Squares Line",
           color: "black",
-          data: [[0,fit1.line()(0)], [10,10]]
+          data: [[xMin,fit1.line()(xMin)], [xMax,fit1.line()(xMax)]]
 
         }]
     });
