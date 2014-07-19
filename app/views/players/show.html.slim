@@ -54,81 +54,11 @@ table.table.table-hover
         td = game.fanduel_points
         td = game.minutes
 
-javascript:
-  function renderChart(id, statName, chartData) {
-    min = jStat(chartData).min();
-    firstQuartile = jStat(chartData).quartiles()[0];
-    median = jStat(chartData).median();
-    mean = jStat(chartData).mean();
-    thirdQuartile = jStat(chartData).quartiles()[2];
-    max = jStat(chartData).max();
-    sd = jStat(chartData).stdev();
-
-    $("#min").text(round(min));
-    $("#1st-quart").text(round(firstQuartile));
-    $("#median").text(round(median));
-    $("#mean").text(round(mean));
-    $("#3rd-quart").text(round(thirdQuartile));
-    $("#max").text(round(max));
-
-    new Highcharts.Chart({
-      chart: {
-        renderTo: id
-      },
-      title: {
-        text: statName
-      },
-      xAxis: {
-        categories: #{ raw @player.games.reverse.collect {|game| game.game_day.strftime('%b %d') + ' ' + game.opponent}}
-      },
-      yAxis: {
-        title: {
-          text: statName
-        },
-        gridLineColor: '#EDEDED',
-        plotLines: [{
-            color: '#FF0000',
-            width: 2,
-            value: mean
-        },
-        {
-          color: '#97C74E',
-            width: 2,
-            value: mean - sd
-        },
-        {
-          color: '#97C74E',
-            width: 2,
-            value: mean + sd
-        }
-        ]
-      },
-      tooltip: {
-        formatter: function() {
-          return this.x + ': ' + Math.round(this.y * 100) / 100 + '<br/> p-value: ' + jStat.ztest(this.y, mean, sd, 1) + '<br/> t-score: ' + jStat.tscore(this.y, mean, sd, chartData.length)
-        }
-      },
-      series: [{
-        name: statName,
-        data: chartData
-      },
-      {
-        name: "Mean",
-        color: '#FF0000',
-        data: []
-      },
-      {
-        name: "1 SD above/below",
-        color: '#97C74E',
-        data: []
-      }],
-    });
-  }
 
 /render Fanduel Points initially
 javascript:
   $(function() {
-    renderChart("fanduel-points", "Fanduel Points", #{@player.games.pluck(:fanduel_points).reverse});
+    renderChart("fanduel-points", "Fanduel Points", #{@player.games.pluck(:fanduel_points).reverse}, #{ raw @player.games.reverse.collect {|game| game.game_day.strftime('%b %d') + ' ' + game.opponent}});
   });
 
 javascript:
@@ -139,25 +69,25 @@ javascript:
 
   $('#fdp-selector').click(function() {
     $("#fanduel-points").show();
-    renderChart("fanduel-points", "Fanduel Points", #{@player.games.pluck(:fanduel_points).reverse});
+    renderChart("fanduel-points", "Fanduel Points", #{@player.games.pluck(:fanduel_points).reverse}, #{ raw @player.games.reverse.collect {|game| game.game_day.strftime('%b %d') + ' ' + game.opponent}});
   });
 
   $('#minutes-selector').click(function() {
     $("#fdp-selector").removeClass("active");
     $("#minutes").show();
-    renderChart("minutes", "Minutes", #{@player.games.pluck(:minutes).reverse});
+    renderChart("minutes", "Minutes", #{@player.games.pluck(:minutes).reverse}, #{ raw @player.games.reverse.collect {|game| game.game_day.strftime('%b %d') + ' ' + game.opponent}});
   });
 
   $('#fdp-per-36-selector').click(function() {
     $("#fdp-selector").removeClass("active");
     $("#fdp-per-36").show();
-    renderChart("fdp-per-36", "FDP per 36", #{@player.games.reverse.collect {|game| (game.fanduel_points / game.minutes) * 36}});
+    renderChart("fdp-per-36", "FDP per 36", #{@player.games.reverse.collect {|game| (game.fanduel_points / game.minutes) * 36}}, #{ raw @player.games.reverse.collect {|game| game.game_day.strftime('%b %d') + ' ' + game.opponent}});
   });
 
   $('#salary-selector').click(function() {
     $("#fdp-selector").removeClass("active");
     $("#salary").show();
-    renderChart("salary", "Salary", #{@player.games.pluck(:salary).reverse});
+    renderChart("salary", "Salary", #{@player.games.pluck(:salary).reverse}, #{ raw @player.games.reverse.collect {|game| game.game_day.strftime('%b %d') + ' ' + game.opponent}});
   });
 
 

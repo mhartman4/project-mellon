@@ -15,6 +15,23 @@
 //= require turbolinks
 //= require_tree .
 
+this.round = function(num) {
+  return Math.round(num * 100) / 100;
+};
+
+this.zip = function(arrayA, arrayB) {
+  var length, n, result;
+  length = Math.min(arrayA.length, arrayB.length);
+  result = [];
+  n = 0;
+  while (n < length) {
+    result.push([arrayA[n], arrayB[n]]);
+    n++;
+  }
+  return result;
+};
+
+
 var substringMatcher = function(strs) {
     return function findMatches(q, cb) {
       var matches, substringRegex;

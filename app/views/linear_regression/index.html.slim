@@ -1,0 +1,66 @@
+
+h1 Linear Regression (one variable)
+
+#scatter-plot
+
+javascript:
+  // Draw a bubble chart for brand price vs volume sized by value
+  /*var svg = dimple.newSvg("body", 600, 400);
+  var data =
+    #{raw @games.to_json(only: [:minutes, :fanduel_points])}
+    ;
+  var myChart = new dimple.chart(svg, data);
+  myChart.addMeasureAxis("x", "Sales Volume");
+  myChart.addMeasureAxis("y", "Price");
+  myChart.addSeries("Brand", dimple.plot.bubble);
+  myChart.draw();
+  */
+  $(function () {
+
+    inputData = #{Game.all.pluck(:minutes, :fanduel_points)};
+    fit1 = ss.linear_regression().data(inputData);
+    return new Highcharts.Chart({
+      chart: {
+        renderTo: "scatter-plot"
+      },
+      title: {
+            text: 'Minutes vs Fanduel Points'
+        },
+        xAxis: {
+            title: {
+                enabled: true,
+                text: 'Minutes'
+            },
+            startOnTick: true,
+            endOnTick: true,
+            showLastLabel: true
+        },
+        yAxis: {
+            title: {
+                text: 'Fanduel Points'
+            }
+        },
+        tooltip: {
+          formatter: function() {
+            return round(this.x) + " mins, " + round(this.y) + " FDP" ;
+          }
+        },
+        series: [{
+          type: "scatter",
+          name: "All Players",
+          color: 'rgba(119, 152, 191, .5)',
+          data: inputData
+        },
+        {
+          type: "line",
+          name: "Least Squares Line",
+          color: "black",
+          data: [[0,fit1.line()(0)], [10,10]]
+
+        }]
+    });
+  });
+
+
+
+

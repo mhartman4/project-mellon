@@ -53,4 +53,6 @@ gem 'slim-rails'
 
 gem 'will_paginate'
 
+gem 'rsruby'
+
 

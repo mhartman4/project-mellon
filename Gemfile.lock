@@ -80,6 +80,7 @@ GEM
     rake (10.1.1)
     rdoc (4.1.1)
       json (~> 1.4)
+    rsruby (0.5.1.1)
     sass (3.3.0)
       rake
     sass-rails (4.0.1)
@@ -136,6 +137,7 @@ DEPENDENCIES
   pg
   rails (= 4.0.3)
   rails_12factor
+  rsruby
   sass-rails (~> 4.0.0)
   sdoc
   slim-rails
