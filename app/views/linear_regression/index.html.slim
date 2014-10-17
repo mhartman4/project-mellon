@@ -1,24 +1,21 @@
 
 h1 Linear Regression (one variable)
 
-
-.col-md-3 style="display: flex;"
-  select.form-control
-    -Game.column_names.each do |col_name|
+.well.col-md-4 style="display: flex;"
+  select.form-control#x-select
+    -@col_names.each do |col_name|
       -unless col_name==params[:x]
-        option #{col_name}
+        option value="#{col_name}" #{col_name.titleize}
       -else
-        option selected="selected" #{col_name}
-  select.form-control
-    -Game.column_names.each do |col_name|
+        option value="#{col_name}" selected="selected" #{col_name.titleize}
+  select.form-control#y-select
+    -@col_names.each do |col_name|
       -unless col_name==params[:y]
-        option #{col_name}
+        option value="#{col_name}" #{col_name.titleize}
       -else
-        option selected="selected" #{col_name}
+        option value="#{col_name}" selected="selected" #{col_name.titleize}
 
-
-
-#scatter-plot
+.col-md-8#scatter-plot
 
 javascript:
   $(function () {
@@ -32,7 +29,7 @@ javascript:
         renderTo: "scatter-plot"
       },
       title: {
-            text: '#{params[:x].titleize} vs. #{params[:y].titleize}'
+        text: '#{params[:x].titleize} vs. #{params[:y].titleize}'
         },
         xAxis: {
             title: {
@@ -68,6 +65,12 @@ javascript:
         }]
     });
   });
+
+javascript:
+  $("select").change(function() {
+    location.href = "/linear_regression?x=" + $("#x-select").val() + "&y=" + $("#y-select").val();
+  });
+
 
 
 

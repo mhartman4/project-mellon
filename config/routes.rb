@@ -60,5 +60,5 @@ ProjectMellon::Application.routes.draw do
   #     resources :products
   #   end
 
-  root 'welcome#index'
+  root 'linear_regression#index'
 end

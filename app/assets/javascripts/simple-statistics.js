@@ -137,14 +137,17 @@
             numerator = ss.variance(error);
             denominator = ss.sum(squared_x_spreads);
 
+            standard_error[0] = Math.sqrt(numerator*( (1/n)+(Math.pow(mean_of_x, 2)/denominator) ))
             standard_error[1] = Math.sqrt(numerator / denominator);
-
-
-
-
-
-
             return standard_error;
+        };
+
+        linreg.t_statistic = function() {
+            return linreg.m() / linreg.standard_error()[1];
+        };
+
+        linreg.p_value = function() {
+
         };
 
         return linreg;

@@ -10,7 +10,7 @@ class PlayersController < ApplicationController
     end
 
     #@players = Player.all.sort! { |a,b| a.send(params[:sort]) <=> a.send(params[:sort]) }
-    @players = Player.all.paginate(:page => params[:page])
+    @players = Player.all.paginate(page: params[:page])
     if params[:name]
       player = Player.find_by_name(params[:name])
       redirect_to "/players/#{player.id}"
