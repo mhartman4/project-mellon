@@ -15,10 +15,11 @@ h6 Data includes all games for all NBA players in '13-'14
         option value="#{col_name}" #{col_name.titleize}
       - else
         option value="#{col_name}" selected="selected" #{col_name.titleize}
+.span.col-md-1 &nbsp;
+.col-md-6#scatter-plot
 
-.col-md-8#scatter-plot
-.col-md-8#loading
-  h1 Loading!
+.well.col-md-6#loading
+  img src="http://sierrafire.cr.usgs.gov/images/loading.gif" width="300"
 
 javascript:
   $(document).ready(function()
