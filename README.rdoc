@@ -1,28 +1,14 @@
-== README
+== Project Mellon Rails App!
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+The home page runs javascript-based linear regression on all games played by NBA players in '13-'14. You can also explore individual player performances over the course of last season.
 
-Things you may want to cover:
+Fanduel Scoring For Reference
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-
-
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+* 3-pt FG = 3pts
+* 2-pt FG = 2pts
+* FT = 1pt
+* Rebound = 1.2pts
+* Assist = 1.5pts
+* Block = 2pts
+* Steal = 2pts
+* Turnover = -1pt
