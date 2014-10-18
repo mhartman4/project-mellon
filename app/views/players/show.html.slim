@@ -1,7 +1,7 @@
 br
 
 p
-  = link_to '< Back', players_path, :class=>"btn btn-primary", :style=>"background-color: white; border-color: #c0d9ef; color: black;"
+  = link_to '< Back', root_path, :class=>"btn btn-primary", :style=>"background-color: white; border-color: #c0d9ef; color: black;"
 h1 align="center"
   ="#{@player.name} - #{@player.games.pluck(:team).uniq.to_sentence}"
 

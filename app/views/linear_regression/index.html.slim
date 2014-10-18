@@ -1,21 +1,31 @@
-
-h1 Linear Regression (one variable)
+br
+h1 Linear Regression
+h6 Data includes all games for all NBA players in '13-'14
 
 .well.col-md-4 style="display: flex;"
   select.form-control#x-select
-    -@col_names.each do |col_name|
-      -unless col_name==params[:x]
+    - @col_names.each do |col_name|
+      - unless col_name==params[:x]
         option value="#{col_name}" #{col_name.titleize}
-      -else
+      - else
         option value="#{col_name}" selected="selected" #{col_name.titleize}
   select.form-control#y-select
-    -@col_names.each do |col_name|
-      -unless col_name==params[:y]
+    - @col_names.each do |col_name|
+      - unless col_name==params[:y]
         option value="#{col_name}" #{col_name.titleize}
-      -else
+      - else
         option value="#{col_name}" selected="selected" #{col_name.titleize}
 
 .col-md-8#scatter-plot
+.col-md-8#loading
+  h1 Loading!
+
+javascript:
+  $(document).ready(function()
+    {
+      $("#loading").hide();
+    });
+
 
 javascript:
   $(function () {
@@ -29,7 +39,7 @@ javascript:
         renderTo: "scatter-plot"
       },
       title: {
-        text: '#{params[:x].titleize} vs. #{params[:y].titleize}'
+        text: '#{params[:y].titleize} on #{params[:x].titleize}'
         },
         xAxis: {
             title: {
@@ -66,10 +76,6 @@ javascript:
     });
   });
 
-javascript:
-  $("select").change(function() {
-    location.href = "/linear_regression?x=" + $("#x-select").val() + "&y=" + $("#y-select").val();
-  });
 
 
 

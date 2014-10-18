@@ -18,11 +18,13 @@
 
 #pm-logo {
   margin-left: 20px;
-  margin-bottom: 20px;
+  margin-top: 30px;
 }
 
 #the-basics {
   margin-left: 20px;
+  margin-bottom: 20px;
+  display: inline-block;
 }
 
 .twitter-typeahead{
